@@ -33,6 +33,7 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
+  # I should rewrite this method using recursion 
 
   def insert(key)
 
@@ -70,8 +71,6 @@ class Tree
   end
 
 
-
-  
 
   end
 
