@@ -1,3 +1,5 @@
+require './node'
+
 class Tree
   attr_accessor :root
 
@@ -24,4 +26,16 @@ class Tree
 
     root
   end
+
+   def pretty_print(node = @root, prefix = '', is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  end
+
 end
+
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+data = Tree.new(arr)
+
+data.pretty_print
