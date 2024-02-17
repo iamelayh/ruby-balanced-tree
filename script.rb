@@ -70,14 +70,23 @@ class Tree
       end
   end
 
+  def delete(key)
+    @root = delete_recursive(@root, key)
+  end
 
+  def delete_recursive(node, key)
+
+    return nil if node.nil?
+    
 
   end
 
 
 
+end
+
+
   my_arr = [1, 2, 3, 4, 5, 6, 7, 8, 99]
 
   data = Tree.new(my_arr)
-  data.insert(9)
-  data.pretty_print
+
