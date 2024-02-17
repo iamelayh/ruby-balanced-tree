@@ -74,40 +74,34 @@ class Tree
     @root = delete_recursive(@root, key)
   end
 
-  def delete_recursive(node, key)
+def delete_recursive(node, key)
+  return nil if node.nil?
 
-    return nil if node.nil?
-
-    if key > node.value
-      node.right = delete_recursive(node.right, key)
-
-    elsif key < node.value
-      node.left = delete_recursive(node.left, key)
+  if key > node.value
+    node.right = delete_recursive(node.right, key)
+  elsif key < node.value
+    node.left = delete_recursive(node.left, key)
+  else
+    # Node with two children
+    if node.left.nil?
+      return node.right  # Connect parent to the right child
+    elsif node.right.nil?
+      return node.left   # Connect parent to the left child
     else
-
-      if node.left.nil? && node.right.nil?
-          return nil
-      elsif node.left.nil?
-          return node.right
-      
-      elsif node.right.nil?
-        return node.left
-
-      else 
-
-        sucessor = find_min_val(node.right)
-        node.value = sucessor
-        node.right = delete_recursive(node.right, sucessor)
-
-      end 
+      # Node with two children
+      successor = find_min_val(node.right)
+      node.value = successor.value
+      node.right = delete_recursive(node.right, successor.value)
     end
-      node
   end
+
+  node
+end
 
   
   def find_min_val(node)
     current_node = node
-    current_node = current_node.left until node.left.nil?
+    current_node = current_node.left until current_node.left.nil?
     current_node 
   end
 
@@ -118,4 +112,8 @@ end
 
   data = Tree.new(my_arr)
   data.delete(99)
+  data.insert(9)
+  data.delete(9)
+    data.delete(5)
+
   data.pretty_print
