@@ -127,3 +127,4 @@ end
   my_arr = [1, 2, 3, 4, 5, 6, 7, 8, 99]
 
   data = Tree.new(my_arr)
+  p data.find(6)
