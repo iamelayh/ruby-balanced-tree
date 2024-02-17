@@ -105,15 +105,25 @@ end
     current_node 
   end
 
+  def find(value)
+    find_recursive(@root, value)
+  end
+
+  def find_recursive(node, value)
+    return nil if node.nil?
+  
+    if value > node.value 
+       find_recursive(node.right, value)
+    elsif value < node.value
+        find_recursive(node.left, value)
+    else 
+      return node
+    end 
+  end
+
 end
 
 
   my_arr = [1, 2, 3, 4, 5, 6, 7, 8, 99]
 
   data = Tree.new(my_arr)
-  data.delete(99)
-  data.insert(9)
-  data.delete(9)
-    data.delete(5)
-
-  data.pretty_print
