@@ -27,57 +27,53 @@ class Tree
     root
   end
 
-   def pretty_print(node = @root, prefix = '', is_left = true)
+  def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
-# > I should rewrite this method using recursion 
+  # > I should rewrite this method using recursion
 
   def insert(key)
+    if @root.nil?
+      @root = New.node(key)
+      return
+    end
 
-      if @root.nil? 
-        @root = New.node(key)
+    current_node = @root
+    parent = nil
+
+    while current_node
+
+      parent = current_node
+
+      if key < current_node.value
+        current_node = current_node.left
+
+      elsif key > current_node.value
+        current_node = current_node.right
+      else
         return
       end
+    end
 
-      current_node = @root
-      parent = nil
-
-      while current_node
-
-        parent = current_node
-
-        if key < current_node.value
-          current_node = current_node.left
-
-        elsif key > current_node.value
-          current_node = current_node.right
-        else
-          return
-        end
-      end
-      
     new_node = Node.new(key)
 
-      if key < parent.value  
-          parent.left = new_node
-    
-     elsif 
-        parent.right = new_node
-      end
+    if key < parent.value
+      parent.left = new_node
+
+    elsif parent.right = new_node
+    end
   end
 
   def delete(key)
     @root = delete_recursive(@root, key)
   end
-  
 
   def find(value)
     find_recursive(@root, value)
   end
-
 
   def level_order(&block)
     values = []
@@ -85,16 +81,48 @@ class Tree
     values if !block_given?
   end
 
-  #task
+  # task
   def inorder(&block)
-  #Visits the left subtree, then the root, and finally the right subtree.
-  values = []
-  inorder_recursive(@root, values, &block)
-  values if !block_given?
+    # Visits the left subtree, then the root, and finally the right subtree.
+    values = []
+    inorder_recursive(@root, values, &block)
+    values if !block_given?
+  end
+
+  def preorder(&block)
+    # Visits the left subtree, then the root, and finally the right subtree.
+    values = []
+    preorder_recursive(@root, values, &block)
+    values if !block_given?
+  end
+
+  def postorder(&block)
+    # Visits the left subtree, then the root, and finally the right subtree.
+    values = []
+    postorder_recursive(@root, values, &block)
+    values if !block_given?
+  end
+
+
+  private
+
+  def postorder_recursive(node, values, &block)
+    return if node.nil?
+
+    inorder_recursive(node.left, values, &block)
+    inorder_recursive(node.right, values, &block)
+    block_given? ? yield(node) : values << node.value
+  end
+  
+  def preorder_recursive(node, values, &block)
+    return if node.nil?
+
+    block_given? ? yield(node) : values << node.value
+    inorder_recursive(node.left, values, &block)
+    inorder_recursive(node.right, values, &block)
   end
 
   def inorder_recursive(node, values, &block)
-    
     return if node.nil?
 
     inorder_recursive(node.left, values, &block)
@@ -102,64 +130,59 @@ class Tree
     inorder_recursive(node.right, values, &block)
   end
 
-  private
-
   def find_min_val(node)
     current_node = node
     current_node = current_node.left until current_node.left.nil?
-    current_node 
+    current_node
   end
-
 
   def find_recursive(node, value)
     return nil if node.nil?
-  
-    if value > node.value 
-       find_recursive(node.right, value)
+
+    if value > node.value
+      find_recursive(node.right, value)
     elsif value < node.value
-        find_recursive(node.left, value)
-    else 
+      find_recursive(node.left, value)
+    else
       return node
-    end 
+    end
   end
 
   def level_order_recursive(node, values, &block)
     return if node.nil?
 
     block_given? ? yield(node) : values << node.value
-      
+
     level_order_recursive(node.left, values, &block)
     level_order_recursive(node.right, values, &block)
   end
 
-def delete_recursive(node, key)
+  def delete_recursive(node, key)
+    return nil if node.nil?
 
-  return nil if node.nil?
-
-  if key > node.value
-    node.right = delete_recursive(node.right, key)
-  elsif key < node.value
-    node.left = delete_recursive(node.left, key)
-  else
-    
-    if node.left.nil?
-    
-    elsif node.right.nil?
-      return node.left  
+    if key > node.value
+      node.right = delete_recursive(node.right, key)
+    elsif key < node.value
+      node.left = delete_recursive(node.left, key)
     else
-      successor = find_min_val(node.right)
-      node.value = successor.value
-      node.right = delete_recursive(node.right, successor.value)
+
+      if node.left.nil?
+
+      elsif node.right.nil?
+        return node.left
+      else
+        successor = find_min_val(node.right)
+        node.value = successor.value
+        node.right = delete_recursive(node.right, successor.value)
+      end
     end
-  end
 
-  node
+    node
   end
-
 end
 
+my_arr = [1, 2, 3, 4]
 
-  my_arr = [1, 2, 3, 4]
-
-  data = Tree.new(my_arr)
-  p data.inorder { |node| puts node.value * 2 }
+data = Tree.new(my_arr)
+data.pretty_print
+p data.postorder
