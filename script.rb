@@ -73,31 +73,6 @@ class Tree
   def delete(key)
     @root = delete_recursive(@root, key)
   end
-
-def delete_recursive(node, key)
-  return nil if node.nil?
-
-  if key > node.value
-    node.right = delete_recursive(node.right, key)
-  elsif key < node.value
-    node.left = delete_recursive(node.left, key)
-  else
-    # Node with two children
-    if node.left.nil?
-      return node.right  # Connect parent to the right child
-    elsif node.right.nil?
-      return node.left   # Connect parent to the left child
-    else
-      # Node with two children
-      successor = find_min_val(node.right)
-      node.value = successor.value
-      node.right = delete_recursive(node.right, successor.value)
-    end
-  end
-
-  node
-end
-
   
   def find_min_val(node)
     current_node = node
@@ -121,10 +96,54 @@ end
     end 
   end
 
+  def level_order(&block)
+    values = []
+    level_order_recursive(@root, values, &block)
+    values if !block_given?
+  end
+
+  def level_order_recursive(node, values, &block)
+    return if node.nil?
+
+    block_given? ? yield(node) : values << node.value
+      
+
+    level_order_recursive(node.left, values, &block)
+    level_order_recursive(node.right, values, &block)
+
+  end
+
+
+  private
+
+  def delete_recursive(node, key)
+  return nil if node.nil?
+
+  if key > node.value
+    node.right = delete_recursive(node.right, key)
+  elsif key < node.value
+    node.left = delete_recursive(node.left, key)
+  else
+    # Node with two children
+    if node.left.nil?
+      return node.right  # Connect parent to the right child
+    elsif node.right.nil?
+      return node.left   # Connect parent to the left child
+    else
+      # Node with two children
+      successor = find_min_val(node.right)
+      node.value = successor.value
+      node.right = delete_recursive(node.right, successor.value)
+    end
+  end
+
+  node
+  end
+
 end
 
 
-  my_arr = [1, 2, 3, 4, 5, 6, 7, 8, 99]
+  my_arr = [1, 2, 3, 4]
 
   data = Tree.new(my_arr)
-  p data.find(6)
+  data.level_order { |node| puts node.value } 
