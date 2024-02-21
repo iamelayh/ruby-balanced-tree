@@ -111,6 +111,35 @@ class Tree
     depth_recursive(find(node), @root, depth = 0)
   end
 
+
+  def calc_height(node) # the left root of @root
+    return 0 if node.nil?
+
+    left_height = calc_height(node.left)
+    right_height = calc_height(node.right)
+
+    [left_height, right_height].max + 1
+  end
+
+  def balanced?(node = @root)
+    return true if node.nil?
+
+    left_height = calc_height(node.left)
+    right_height = calc_height(node.right)
+
+    if (left_height - right_height).abs <= 1 && balanced?(node.left) && balanced?(node.right)
+      return true 
+    else 
+      return false
+    end
+  end    
+
+  
+
+  
+
+  private
+
   def depth_recursive(node, current_node, depth = 0)
     return 0 if current_node.nil?
 
@@ -122,8 +151,6 @@ class Tree
       depth
     end
   end
-
-  private
 
   def height_recursive(node)
     return -1 if node.nil?
@@ -209,8 +236,9 @@ class Tree
   end
 end
 
-my_arr = [1, 2, 3, 4, 5]
+
+
+my_arr = [1, 2, 9, 1, 6]
 
 data = Tree.new(my_arr)
-data.pretty_print
-p data.depth(2)
+p data.balanced?
