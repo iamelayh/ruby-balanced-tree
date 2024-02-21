@@ -108,10 +108,23 @@ class Tree
   end
 
   def depth(node)
+    depth_recursive(find(node), @root, depth = 0)
+  end
 
-  end 
+  def depth_recursive(node, current_node, depth = 0)
+    return 0 if current_node.nil?
+
+    if node.value < current_node.value
+      depth_recursive(node, current_node.left, depth + 1)
+    elsif node.value > current_node.value
+      depth_recursive(node, current_node.right, depth + 1)
+    else
+      depth
+    end
+  end
 
   private
+
   def height_recursive(node)
     return -1 if node.nil?
 
@@ -119,7 +132,6 @@ class Tree
     right_height = height_recursive(node.right)
 
     [left_height, right_height].max + 1
-   
   end
 
   def postorder_recursive(node, values, &block)
@@ -201,4 +213,4 @@ my_arr = [1, 2, 3, 4, 5]
 
 data = Tree.new(my_arr)
 data.pretty_print
-data.height(4)
+p data.depth(2)
