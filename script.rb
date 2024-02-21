@@ -103,11 +103,15 @@ class Tree
     values if !block_given?
   end
 
-# ------------------------------------------ >
   def height(node)
     height_recursive(find(node))
   end
 
+  def depth(node)
+
+  end 
+
+  private
   def height_recursive(node)
     return -1 if node.nil?
 
@@ -117,9 +121,6 @@ class Tree
     [left_height, right_height].max + 1
    
   end
-# ------------------------------------------ >
-
-  private
 
   def postorder_recursive(node, values, &block)
     return if node.nil?
