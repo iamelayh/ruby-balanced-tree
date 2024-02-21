@@ -103,6 +103,21 @@ class Tree
     values if !block_given?
   end
 
+# ------------------------------------------ >
+  def height(node)
+    height_recursive(find(node))
+  end
+
+  def height_recursive(node)
+    return -1 if node.nil?
+
+    left_height = height_recursive(node.left)
+    right_height = height_recursive(node.right)
+
+    [left_height, right_height].max + 1
+   
+  end
+# ------------------------------------------ >
 
   private
 
@@ -113,7 +128,7 @@ class Tree
     inorder_recursive(node.right, values, &block)
     block_given? ? yield(node) : values << node.value
   end
-  
+
   def preorder_recursive(node, values, &block)
     return if node.nil?
 
@@ -181,8 +196,8 @@ class Tree
   end
 end
 
-my_arr = [1, 2, 3, 4]
+my_arr = [1, 2, 3, 4, 5]
 
 data = Tree.new(my_arr)
 data.pretty_print
-p data.postorder
+data.height(4)
