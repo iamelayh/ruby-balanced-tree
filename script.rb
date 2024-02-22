@@ -213,37 +213,86 @@ class Tree
     level_order_recursive(node.right, values, &block)
   end
 
-  def delete_recursive(node, key)
-    return nil if node.nil?
+ def delete_recursive(node, key)
+  return nil if node.nil?
 
-    if key > node.value
-      node.right = delete_recursive(node.right, key)
-    elsif key < node.value
-      node.left = delete_recursive(node.left, key)
+  if key > node.value
+    node.right = delete_recursive(node.right, key)
+  elsif key < node.value
+    node.left = delete_recursive(node.left, key)
+  else
+    if node.left.nil?
+      return node.right
+    elsif node.right.nil?
+      return node.left
     else
-
-      if node.left.nil?
-
-      elsif node.right.nil?
-        return node.left
-      else
-        successor = find_min_val(node.right)
-        node.value = successor.value
-        node.right = delete_recursive(node.right, successor.value)
-      end
+      successor = find_min_val(node.right)
+      node.value = successor.value
+      node.right = delete_recursive(node.right, successor.value)
     end
-
-    node
   end
+
+  node
+end
+
 end
 
 
 
 my_arr = [1, 2, 3, 4, 5, 9]
-
 data = Tree.new(my_arr)
-  data.insert(99999)
-  data.insert(22)
-p data.balanced?
- data.rebalance
- p data.balanced?
+
+# Print the original tree
+puts "Original Tree: "
+data.pretty_print
+
+# Insert a new value
+data.insert(99)
+data.insert(7)
+
+# Print the tree after insertion
+puts "\nTree after inserting 6 and 7:"
+data.pretty_print
+
+# Delete a value
+data.delete(7)
+data.delete(99)
+
+# Print the tree after deletion
+puts "\nTree after deleting 7 and 99:"
+data.pretty_print
+
+# Find a value
+found_node = data.find(4)
+puts "\nNode with value 4 found: #{found_node&.value}"
+
+# Level order traversal
+puts "\nLevel Order Traversal:"
+puts data.level_order.join(', ')
+
+# In-order traversal
+puts "\nIn-Order Traversal:"
+puts data.inorder.join(', ')
+
+# Pre-order traversal
+puts "\nPre-Order Traversal:"
+puts data.preorder.join(', ')
+
+# Height of the node 3
+puts "\nHeight of the Tree: #{data.height(3)}"
+
+# Depth of a node
+puts "\nDepth of Node with value 2: #{data.depth(2)}"
+
+# Check if the tree is balanced
+puts "\nIs the Tree Balanced?: #{data.balanced?}"
+
+# Rebalance the tree
+data.rebalance
+
+# Print the rebalanced tree
+puts "\nRebalanced Tree:"
+data.pretty_print
+
+# Check if the tree is balanced after rebalancing
+puts "\nIs the Rebalanced Tree Balanced?: #{data.balanced?}"
