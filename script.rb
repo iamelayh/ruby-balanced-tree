@@ -113,18 +113,19 @@ class Tree
 
   def balanced?(node = @root)
     return true if node.nil?
+
     left_height = calc_height(node.left)
     right_height = calc_height(node.right)
-     if (left_height - right_height).abs <= 1 && balanced?(node.left) && balanced?(node.right)
-       true 
-     else 
-       false
-      end
-  end    
+    if (left_height - right_height).abs <= 1 && balanced?(node.left) && balanced?(node.right)
+      true
+    else
+      false
+    end
+  end
 
-  def rebalance(node = @root, values = []) # 1 
-
+  def rebalance(node = @root, values = []) # 1
     return values if node.nil?
+
     rebalance(node.left, values)
     values << node.value
     rebalance(node.right, values)
@@ -136,6 +137,7 @@ class Tree
 
   def calc_height(node)
     return 0 if node.nil?
+
     left_height = calc_height(node.left)
     right_height = calc_height(node.right)
     [left_height, right_height].max + 1
@@ -213,31 +215,28 @@ class Tree
     level_order_recursive(node.right, values, &block)
   end
 
- def delete_recursive(node, key)
-  return nil if node.nil?
+  def delete_recursive(node, key)
+    return nil if node.nil?
 
-  if key > node.value
-    node.right = delete_recursive(node.right, key)
-  elsif key < node.value
-    node.left = delete_recursive(node.left, key)
-  else
-    if node.left.nil?
-      return node.right
-    elsif node.right.nil?
-      return node.left
+    if key > node.value
+      node.right = delete_recursive(node.right, key)
+    elsif key < node.value
+      node.left = delete_recursive(node.left, key)
     else
-      successor = find_min_val(node.right)
-      node.value = successor.value
-      node.right = delete_recursive(node.right, successor.value)
+      if node.left.nil?
+        return node.right
+      elsif node.right.nil?
+        return node.left
+      else
+        successor = find_min_val(node.right)
+        node.value = successor.value
+        node.right = delete_recursive(node.right, successor.value)
+      end
     end
+
+    node
   end
-
-  node
 end
-
-end
-
-
 
 my_arr = [1, 2, 3, 4, 5, 9]
 data = Tree.new(my_arr)
