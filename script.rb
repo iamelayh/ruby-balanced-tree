@@ -111,34 +111,35 @@ class Tree
     depth_recursive(find(node), @root, depth = 0)
   end
 
-
-  def calc_height(node) # the left root of @root
-    return 0 if node.nil?
-
-    left_height = calc_height(node.left)
-    right_height = calc_height(node.right)
-
-    [left_height, right_height].max + 1
-  end
-
   def balanced?(node = @root)
     return true if node.nil?
-
     left_height = calc_height(node.left)
     right_height = calc_height(node.right)
-
-    if (left_height - right_height).abs <= 1 && balanced?(node.left) && balanced?(node.right)
-      return true 
-    else 
-      return false
-    end
+     if (left_height - right_height).abs <= 1 && balanced?(node.left) && balanced?(node.right)
+       true 
+     else 
+       false
+      end
   end    
 
-  
+  def rebalance(node = @root, values = []) # 1 
 
-  
+    return values if node.nil?
+    rebalance(node.left, values)
+    values << node.value
+    rebalance(node.right, values)
+
+    @root = build_tree(values)
+  end
 
   private
+
+  def calc_height(node)
+    return 0 if node.nil?
+    left_height = calc_height(node.left)
+    right_height = calc_height(node.right)
+    [left_height, right_height].max + 1
+  end
 
   def depth_recursive(node, current_node, depth = 0)
     return 0 if current_node.nil?
@@ -238,7 +239,11 @@ end
 
 
 
-my_arr = [1, 2, 9, 1, 6]
+my_arr = [1, 2, 3, 4, 5, 9]
 
 data = Tree.new(my_arr)
+  data.insert(99999)
+  data.insert(22)
 p data.balanced?
+ data.rebalance
+ p data.balanced?
